@@ -75,7 +75,8 @@ default_auditd_rules() {
     echo "-a exit,always -F arch=b64 -F auid>=1000 -F auid!=-1 -S execve
 -a exit,always -F arch=b32 -F auid>=1000 -F auid!=-1 -S execve" >> /etc/audit/rules.d/custom.rules
     augenrules --check && augenrules --load &> /dev/null
-    systemctl restart auditd
+    systemctl kill auditd
+    systemctl start auditd ## Have to kill and restart for rpm based distros
 }
 
 generate_test_account() {
@@ -100,12 +101,18 @@ check_root
 
 ## Install packages ##
 check_and_install_package nginx
+systemctl start nginx
 
 check_and_install_package ipset
 
 check_and_install_package iptables
 
-check_and_install_package auditd
+if [ -n "$(which dpkg)" ]; then
+    check_and_install_package auditd
+elif [ -n "$(which rpm)" ]; then
+    check_and_install_package audit
+fi
+
 
 check_and_install_package curl
 

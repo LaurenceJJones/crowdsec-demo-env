@@ -272,6 +272,11 @@ else
 fi
 	EOT
     chmod  700 /opt/bouncer.sh
+    ## check if rpm and selinux is enabled
+    if [ "$(getenforce)" == "Enforcing" ]; then
+      echo "Selinux enabled, disabling due to custom bouncer"
+      setenforce 0
+    fi
     systemctl enable --now crowdsec-custom-bouncer
 }
 
