@@ -6,7 +6,7 @@ Currently only tests on Debian based distributions are supported. Note nginx bou
 
 ### Usage
 
-Environment init script will setup iptables, nginx and auditd. This **WILL** not install any CrowdSec components this is purely to setup the environment to log and block traffic.
+Environment init script will setup iptables, nginx and auditd. This **WILL NOT** install any CrowdSec components this is purely to setup the environment to log and block traffic.
 
 **RUN BEFORE INSTALLING CROWDSEC SECURITY ENGINE**
 ```bash
