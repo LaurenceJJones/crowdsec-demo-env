@@ -63,7 +63,7 @@ default_iptables_rules() {
     sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
     sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
     ## Default iptables log rule to match our scenario ##
-    sudo iptables -A INPUT -m limit --limit 1/min --limit-burst 16 -j LOG
+    sudo iptables -A INPUT -j LOG
     sudo iptables -P INPUT DROP
     sudo iptables -P FORWARD ACCEPT
     sudo iptables -P OUTPUT ACCEPT
