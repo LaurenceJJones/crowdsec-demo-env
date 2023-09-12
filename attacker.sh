@@ -4,6 +4,28 @@ GOBUSTER_VERSION="3.6.0"
 SSB_VERSION="0.1.1"
 # This script is used to scaffold binaries to attack defender systems
 ## Helpers ##
+check_package_installed() {
+    if [ -n "$(which dpkg)" ]; then
+        dpkg -s $1 &> /dev/null
+    elif [ -n "$(which rpm)" ]; then
+        rpm -q $1 &> /dev/null
+    fi
+}
+
+install_package() {
+    if [ -n "$(which apt-get)" ]; then
+        sudo apt-get install -y $1
+    elif [ -n "$(which yum)" ]; then
+        sudo yum install -y $1
+    fi
+}
+
+check_and_install_package() {
+    if ! check_package_installed $1; then
+        install_package $1
+    fi
+}
+
 get_arch () {
     case "$(uname -m)" in
         "x86_64" | "amd64")
@@ -76,7 +98,7 @@ create_aliases () {
 	echo "alias sshbruteforce='/usr/local/bin/ssb -w /opt/wordlists/darkweb2017-top100.txt \$1@\$2'" >> ~/.bashrc
 	echo "Please run 'source ~/.bashrc' to use the aliases"
 }
-
+check_and_install_package git
 download_wordlists
 download_gobuster
 download_nikto
