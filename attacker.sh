@@ -73,7 +73,10 @@ download_nikto () {
 	git clone https://github.com/sullo/nikto
 	cd nikto/program
 	git checkout nikto-2.5.0
-	mv nikto.pl /usr/local/bin/nikto
+	mkdir /opt/nikto
+	mv -R * /opt/nikto
+	ln -s /opt/nikto/nikto.pl /usr/local/bin/nikto
+	sed -i 's/#EXECDIR/EXECDIR/g' /opt/nikto/nikto.conf
 	cd -
 	rm -rf "$TEMP_DIR"
 }
