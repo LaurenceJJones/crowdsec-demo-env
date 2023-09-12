@@ -1,0 +1,84 @@
+#!/bin/bash
+#Constants
+GOBUSTER_VERSION="3.6.0"
+SSB_VERSION="0.1.1"
+# This script is used to scaffold binaries to attack defender systems
+## Helpers ##
+get_arch () {
+    case "$(uname -m)" in
+        "x86_64" | "amd64")
+            echo "amd64"
+            ;;
+        "armv7" | "armv7l")
+            echo "armhf"
+            ;;
+        "armv8" | "aarch64")
+            echo "arm64"
+            ;;
+        *)
+            echo "Unsupported architecture"
+            exit 1
+            ;;
+    esac
+}
+get_arch_gobuster() {
+    case "$(uname -m)" in
+        "x86_64" | "amd64")
+            echo "x86_64"
+            ;;
+        "armv8" | "aarch64")
+            echo "arm64"
+            ;;
+        *)
+            echo "Unsupported architecture"
+            exit 1
+            ;;
+    esac
+}
+## end of helpers ##
+## Download gobuster
+
+download_gobuster () {
+	TEMP_DIR=$(mktemp -d)
+	wget -qO- "https://github.com/OJ/gobuster/releases/download/v$GOBUSTER_VERSION/gobuster_Linux_$(get_arch_gobuster).tar.gz" | tar -xz -C "$TEMP_DIR"
+	mv "$TEMP_DIR/gobuster" /usr/local/bin/gobuster
+	rm -rf "$TEMP_DIR"
+}
+
+download_nikto () {
+	TEMP_DIR=$(mktemp -d)
+	cd "$TEMP_DIR"
+	git clone https://github.com/sullo/nikto
+	cd nikto/program
+	git checkout nikto-2.5.0
+	mv nikto.pl /usr/local/bin/nikto
+}
+
+download_ssb () {
+	TEMP_DIR=$(mktemp -d)
+	wget -qO- "https://github.com/pwnesia/ssb/releases/download/v$SSB_VERSION/ssb_$(echo $SSB_VERSION)_linux_$(get_arch).tar.gz" | tar -xz -C "$TEMP_DIR"
+	mv "$TEMP_DIR/ssb" /usr/local/bin/ssb
+	rm -rf "$TEMP_DIR"
+}
+
+download_wordlists () {
+	mkdir /opt/wordlists
+	cd /opt/wordlists
+	wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt
+	wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/top-usernames-shortlist.txt
+	wget https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/darkweb2017-top100.txt
+	cd -
+}
+
+create_aliases () {
+	echo "alias webscan='/usr/local/bin/gobuster dir -w /opt/wordlists/common.txt -u \$1 --random-agent'" >> ~/.bashrc
+	echo "alias cvescan='/usr/local/bin/nikto -h http://\$1'" >> ~/.bashrc
+	echo "alias sshbruteforce='/usr/local/bin/ssb -w /opt/wordlists/darkweb2017-top100.txt \$1@\$2'" >> ~/.bashrc
+	echo "Please run 'source ~/.bashrc' to use the aliases"
+}
+
+download_wordlists
+download_gobuster
+download_nikto
+download_ssb
+create_aliases
