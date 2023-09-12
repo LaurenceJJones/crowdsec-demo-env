@@ -54,3 +54,26 @@ Beware of running tools like `Nikto` since they can also trigger CVE scenarios a
 The environment init script will setup auditd to log all commands run by users created suid > 1000 and logs them to `/var/log/audit/audit.log`. To trigger this scenario use `sudo su test` to transfer from root -> test user account, then you can download `auditd-sus.sh` and run it as the test user.
 
 **Note** Currently we do not deploy a notification plugin so you will have to `cat /var/log/crowdsec.log` to see the triggered scenarios.
+
+### Attacker.sh
+
+This script will install and scaffold a bunch of aliases for you to run against the demo environment. Here is a breakdown of the aliases.
+
+```
+sshbruteforce <user>@<ip>
+```
+
+Will launch a ssh bruteforce attack against the specified IP and User
+
+```
+webscan http[s]://<ip>
+```
+
+Will launch a http scanner against the specified IP
+
+
+```
+cvescan http[s]://<ip>
+```
+
+Will launch a cve scanner against the specified IP
