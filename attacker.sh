@@ -74,6 +74,8 @@ download_nikto () {
 	cd nikto/program
 	git checkout nikto-2.5.0
 	mv nikto.pl /usr/local/bin/nikto
+	cd -
+	rm -rf "$TEMP_DIR"
 }
 
 download_ssb () {
