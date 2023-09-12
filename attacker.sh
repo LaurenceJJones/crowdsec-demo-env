@@ -71,8 +71,8 @@ download_wordlists () {
 }
 
 create_aliases () {
-	echo "alias webscan='/usr/local/bin/gobuster dir -w /opt/wordlists/common.txt -u \$1 --random-agent'" >> ~/.bashrc
-	echo "alias cvescan='/usr/local/bin/nikto -h http://\$1'" >> ~/.bashrc
+	echo "alias webscan='/usr/local/bin/gobuster dir -w /opt/wordlists/common.txt --random-agent -u \$1'" >> ~/.bashrc
+	echo "alias cvescan='/usr/local/bin/nikto -h \$1'" >> ~/.bashrc
 	echo "alias sshbruteforce='/usr/local/bin/ssb -w /opt/wordlists/darkweb2017-top100.txt \$1@\$2'" >> ~/.bashrc
 	echo "Please run 'source ~/.bashrc' to use the aliases"
 }
