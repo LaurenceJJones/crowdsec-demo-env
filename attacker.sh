@@ -76,7 +76,7 @@ download_nikto () {
 	mkdir /opt/nikto
 	mv nikto.conf.default /etc/nikto.conf
 	sed -i 's/#EXECDIR/EXECDIR/g' /etc/nikto.conf
-	mv -R * /opt/nikto
+	mv * /opt/nikto
 	ln -s /opt/nikto/nikto.pl /usr/local/bin/nikto
 	cd -
 	rm -rf "$TEMP_DIR"
