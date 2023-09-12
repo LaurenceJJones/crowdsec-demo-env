@@ -74,9 +74,10 @@ download_nikto () {
 	cd nikto/program
 	git checkout nikto-2.5.0
 	mkdir /opt/nikto
+	mv nikto.conf.default /etc/nikto.conf
+	sed -i 's/#EXECDIR/EXECDIR/g' /etc/nikto.conf
 	mv -R * /opt/nikto
 	ln -s /opt/nikto/nikto.pl /usr/local/bin/nikto
-	sed -i 's/#EXECDIR/EXECDIR/g' /opt/nikto/nikto.conf
 	cd -
 	rm -rf "$TEMP_DIR"
 }
