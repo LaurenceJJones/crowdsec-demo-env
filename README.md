@@ -73,7 +73,7 @@ Will launch a http scanner against the specified IP
 
 
 ```
-cvescan http[s]://<ip>
+cvescan http://<ip>
 ```
 
-Will launch a cve scanner against the specified IP
+Will launch a cve scanner against the specified IP NOTE: currently only http targets are supported
