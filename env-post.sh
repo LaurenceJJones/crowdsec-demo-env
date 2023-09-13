@@ -235,6 +235,8 @@ on_success: break
 }
 
 insert_captcha_remediation() {
+    ##Before injecting captcha change default ban timer to 2m
+    sed -i 's/4h/2m/g' /etc/crowdsec/profiles.yaml
     OLD_PROFILE=$(cat /etc/crowdsec/profiles.yaml)
     cat <<-EOT > "/etc/crowdsec/profiles.yaml"
 name: captcha
